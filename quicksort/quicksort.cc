@@ -8,7 +8,7 @@ void quicksort( int* array, int length ){
  	  return;
  	
 	//Sort first,last,and middle for median-of-three
-	//pretend the first at the midlde position
+	//pretend the array[0] is the midlde position to save swap
 	
 	if( array[middle]>array[0]){
 		buf=array[0];
