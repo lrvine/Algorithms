@@ -1,6 +1,3 @@
-#include<iostream>
-using namespace std;
-
 void quicksort( int* array, int length ){
 	int pivot=0;
 	int PartitionLine=1;
@@ -42,8 +39,6 @@ void quicksort( int* array, int length ){
   	    PartitionLine++;
   	  }
   	}   
-	//cout<<"PartitionLine is "<<PartitionLine<<endl;
-	//cout<<" pivot is "<<pivot<<endl;
   	array[0]=array[PartitionLine-1];
   	array[PartitionLine-1]=pivot;
 
