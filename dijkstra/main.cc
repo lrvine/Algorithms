@@ -32,7 +32,7 @@ vector< vector< pair<int,int> > > adjlist;
 string s;
 string buf;
 for(int i=0; i<vertices ; i++){
-  distance[i]=0;
+  distance[i]=-1;
   getline(input,s);
 
   istringstream iss(s);
