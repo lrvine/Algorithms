@@ -8,7 +8,7 @@
 #include "dijkstra.h"
 
 using namespace std;
-
+//TODO  change adjlist to pass by pointer
 void dijkstra( int vertices, int startPoint, int*distance, vector< vector< pair<int,int> > > adjlist ){
 
 	bool *visit = new bool[vertices];
