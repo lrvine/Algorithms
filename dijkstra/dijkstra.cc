@@ -40,5 +40,6 @@ void dijkstra( int vertices, int startPoint, int*distance, vector< vector< pair<
 			}
 		}
 	}
+	delete [ ] visit;
 
 }
