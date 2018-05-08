@@ -1,7 +1,13 @@
+void swapArrayElement( int* array, int a, int b){
+	int buf;
+	buf = array[a];
+	array[a]=array[b];
+	array[b]=buf;
+}
+
 void quicksort( int* array, int length ){
 	int pivot=0;
 	int PartitionLine=1;
-	int buf=0;
 	int middle=length/2;
 
  	if( (length == 0) || (length == 1 ) ) 
@@ -11,33 +17,23 @@ void quicksort( int* array, int length ){
 	//pretend the array[0] is the midlde position to save swap
 	
 	if( array[middle]>array[0]){
-		buf=array[0];
-		array[0]=array[middle];
-		array[middle]=buf;
+		swapArrayElement( array,0, middle);
 	}
 	if( array[0]>array[length-1]){
-		buf=array[0];
-		array[0]=array[length-1];
-		array[length-1]=buf;
+		swapArrayElement( array,0, (length-1) );
 	
 		if( array[middle]>array[0]){
-			buf=array[0];
-			array[0]=array[middle];
-			array[middle]=buf;
+			swapArrayElement( array,0,middle );
 		}
 	}
 	//position 0 would be the midian of three
 	pivot=array[0];
 
   	for(int i=1; i<length ; i++){
-  	  if(array[i]<=pivot){
-  	    if(PartitionLine != i){
-  	      buf=array[i];
-  	      array[i]=array[PartitionLine];
-  	      array[PartitionLine]=buf;
-  	    }
-  	    PartitionLine++;
-  	  }
+  		if(array[i]<=pivot){
+			swapArrayElement( array, i , PartitionLine );
+  	    		PartitionLine++;
+  	  	}
   	}   
   	array[0]=array[PartitionLine-1];
   	array[PartitionLine-1]=pivot;
