@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-c -g -Wall
-SOURCE=main.cc
+SOURCE=main.cc 
 LDFLAGS=
 OBJECTS= $(SOURCE:.cc=.o)
 

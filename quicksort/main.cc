@@ -12,7 +12,7 @@ int main(int argc, char **argv ){
   string infilename;
   string outfilename;
 
-  if(argc>1){
+  if(argc==4){
     length = atoi(argv[1]);
     infilename = argv[2];
     outfilename = argv[3];
