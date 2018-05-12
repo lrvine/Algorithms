@@ -6,3 +6,4 @@ Basic algorithm implementation in C++
 * add Astar              	08/29/2016
 * add mergesort       		05/08/2018
 * add travelling salesman  	05/12/2018
+* add Prim's algorithm  	05/12/2018
