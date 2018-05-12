@@ -22,8 +22,8 @@ struct comparer
 };
 
 long double calbound (route t, double** distance){
-	long double m1;
-	long double m2;
+	long double min1;// shortest distance 
+	long double min2;// second shortest distance
 	long double minToGoal = numeric_limits<long double>::max();
 	long double current;
 	int novisits = t.novisit.size();
@@ -33,24 +33,25 @@ long double calbound (route t, double** distance){
 		current = distance[t.novisit[i]][0];
 		if(current < minToGoal)
 			minToGoal = current;
-		m1 = distance[t.novisit[i]][t.path.back()];
-		m2 = numeric_limits<long double>::max();
+		min1 = distance[t.novisit[i]][t.path.back()];
+		min2 = numeric_limits<long double>::max();
 		for(int j = 0; j < novisits; j++){
 			if( i != j ){
 				current = distance[t.novisit[j]][t.novisit[i]];
-				if(current < m2){
-					if(current < m1){
-						m2 = m1;
-						m1 = current;
+				if(current < min2){
+					if(current < min1){
+						min2 = min1;
+						min1 = current;
 					}else{
-						m2 = current;
+						min2 = current;
 					}
 				}	
 			}
 		}
-		bound += (m1 + m2);
+		bound += (min1 + min2);//shortest possible path for one city
 	}
 	return ((bound/2) + minToGoal + t.cost);
+	// bound need to divided by 2 because each path was counted twice
 }
 
 
