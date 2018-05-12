@@ -1,0 +1,3 @@
+The first line indicates the number of cities. 
+Each city is a point in the plane, and each subsequent line indicates the x- and y-coordinates of a single city.
+The distance between two cities is defined as the Euclidean distance.
