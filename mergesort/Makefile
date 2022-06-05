@@ -1,10 +1,10 @@
 CC=g++
-CFLAGS=-c -g -Wall
-SOURCE=main.cc 
+CFLAGS=-c -g -Wall -std=c++20 -Ofast
+SOURCE=mergeSort.cc main.cc
 LDFLAGS=
 OBJECTS= $(SOURCE:.cc=.o)
 
-EXECUTABLE= mergesort
+EXECUTABLE= mergeSort
 
 
 all:  $(SOURCE) $(EXECUTABLE)

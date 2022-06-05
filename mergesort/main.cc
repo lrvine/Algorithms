@@ -1,57 +1,73 @@
+#include <chrono>
 #include <cstdlib>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
-#include "mergesort.cc"
+#include <vector>
+
+#include "mergeSort.h"
 
 using namespace std;
 
-int main(int argc, char **argv) {
-  int *array;
-  int length;
-  string infilename;
-  string outfilename;
+int main(int argc, char** argv) {
+    string infilename;
+    string outfilename;
+    string method;
 
-  if (argc == 4) {
-    length = atoi(argv[1]);
-    infilename = argv[2];
-    outfilename = argv[3];
-  } else {
-    length = 10000;
-    infilename = "MergeSort.txt";
-    outfilename = "Sorted.txt";
-  }
+    if (argc == 4) {
+        infilename = argv[1];
+        outfilename = argv[2];
+        method = argv[3];
+    } else {
+        infilename = "mergeSort.txt";
+        outfilename = "sorted.txt";
+        method = "iterative";
+    }
 
-  ifstream input;
-  input.open(infilename);
-  if (input.fail()) {
-    cout << "input error!" << endl;
-    return 1;
-  }
+    cout << "start mergesort on file " << infilename << " and output to file "
+         << outfilename << " with " << method << " approach " << endl;
 
-  ofstream output;
-  output.open(outfilename);
-  if (output.fail()) {
-    cout << "output error!" << endl;
-    return 1;
-  }
+    ifstream input;
+    input.open(infilename);
+    if (input.fail()) {
+        cout << "input error!" << endl;
+        return -1;
+    }
 
-  cout << "start mergesort on file " << infilename << " with legnth " << length
-       << " and output to file " << outfilename << endl;
-  array = new int[length];
-  for (int i = 0; i < length; i++) {
-    input >> array[i];
-  }
+    vector<int> arrayToSort;
+    for (string line; getline(input, line);) {
+        arrayToSort.push_back(stoi(line));
+    }
 
-  input.close();
+    input.close();
 
-  mergesort(array, length);
+    auto start = chrono::steady_clock::now();
 
-  cout << "end" << endl;
-  for (int i = 0; i < length; i++) {
-    output << array[i] << endl;
-  }
-  output.close();
-  delete[] array;
+    if (method == "iterative")
+        mergeSortIterative(arrayToSort);
+    else if (method == "recursive")
+        mergeSortRecursive(arrayToSort);
+    else
+        cout << " unsupported method " << endl;
 
-  return 0;
+    // Recording end time.
+    auto end = chrono::steady_clock::now();
+    auto diff = end - start;
+    cout << chrono::duration<double, milli>(diff).count() << " ms" << endl;
+
+    ofstream output;
+    output.open(outfilename);
+    if (output.fail()) {
+        cout << "output error!" << endl;
+        return -1;
+    }
+
+    for (auto& i : arrayToSort) {
+        output << i << endl;
+    }
+    output.close();
+
+    cout << "Finished storing result to file. " << endl;
+
+    return 0;
 }
