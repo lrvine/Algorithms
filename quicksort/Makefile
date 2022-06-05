@@ -1,10 +1,10 @@
 CC=g++
-CFLAGS=-c -g -Wall
-SOURCE=main.cc 
+CFLAGS=-c -g -Wall -std=c++20 -Ofast
+SOURCE=quickSort.cc main.cc
 LDFLAGS=
 OBJECTS= $(SOURCE:.cc=.o)
 
-EXECUTABLE= quicksort
+EXECUTABLE= quickSort
 
 
 all:  $(SOURCE) $(EXECUTABLE)

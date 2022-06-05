@@ -1,52 +1,64 @@
+#include <chrono>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include "quicksort.cc"
+
+#include "quickSort.h"
 
 using namespace std;
 
-int main(int argc, char **argv) {
-  int *array;
-  int length;
-  string infilename;
-  string outfilename;
+int main(int argc, char** argv) {
+    string infilename;
+    string outfilename;
 
-  if (argc == 4) {
-    length = atoi(argv[1]);
-    infilename = argv[2];
-    outfilename = argv[3];
-  } else {
-    length = 10000;
-    infilename = "QuickSort.txt";
-    outfilename = "Sorted.txt";
-  }
+    if (argc == 3) {
+        infilename = argv[1];
+        outfilename = argv[2];
+    } else {
+        infilename = "quickSort.txt";
+        outfilename = "sorted.txt";
+    }
 
-  ifstream input;
-  input.open(infilename);
-  if (input.fail()) {
-    cout << "input error!" << endl;
-    return 1;
-  }
+    cout << "start quick sort on file " << infilename << " and output to file "
+         << outfilename << endl;
 
-  ofstream output;
-  output.open(outfilename);
+    ifstream input;
 
-  cout << "start quicksort on file " << infilename << " with legnth " << length
-       << endl;
-  array = new int[length];
-  for (int i = 0; i < length; i++) {
-    input >> array[i];
-  }
+    input.open(infilename);
+    if (input.fail()) {
+        cout << "input error!" << endl;
+        return -1;
+    }
 
-  input.close();
+    vector<int> arrayToSort;
+    for (string line; getline(input, line);) {
+        arrayToSort.push_back(stoi(line));
+    }
 
-  quicksort(array, length);
+    input.close();
 
-  cout << "end" << endl;
-  for (int i = 0; i < length; i++) {
-    output << array[i] << endl;
-  }
-  output.close();
-  delete array;
-  return 0;
+    auto start = chrono::steady_clock::now();
+
+    quickSort(arrayToSort);
+
+    // Recording end time.
+    auto end = chrono::steady_clock::now();
+    auto diff = end - start;
+    cout << chrono::duration<double, milli>(diff).count() << " ms" << endl;
+
+    ofstream output;
+    output.open(outfilename);
+    if (output.fail()) {
+        cout << "output error!" << endl;
+        return -1;
+    }
+
+    for (auto& i : arrayToSort) {
+        output << i << endl;
+    }
+    output.close();
+
+    cout << "Finished storing result to file. " << endl;
+
+    return 0;
 }
