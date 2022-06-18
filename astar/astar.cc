@@ -1,108 +1,60 @@
 #include "astar.h"
+
 #include <algorithm>
-#include <fstream>
-#include <iostream>
 #include <queue>
-#include <utility>
-#include <vector>
 
-int **Astar::allocateCostMap(int width, int height) {
-  int **costMap = new int *[width];
-  for (int i = 0; i < width; i++) {
-    costMap[i] = new int[height];
-  }
-  for (int i = 0; i < height; i++) {
-    for (int j = 0; j < width; j++) {
-      costMap[j][i] = INT_MAX;
-    }
-  }
-  return costMap;
-}
+int Astar::search(vector<vector<char>>& originalMap, pair<int, int> start,
+                  pair<int, int> destination) {
+    if (originalMap.size() == 0) return -1;
 
-void Astar::deleteCostMap(int **costMap, int width) {
-  for (int i = 0; i < width; i++) {
-    delete[] costMap[i];
-  }
-  delete[] costMap;
-}
+    int width = originalMap.size();
+    int height = originalMap[0].size();
 
-int Astar::search(int width, int height, char **originalMap,
-                  pair<int, int> start, pair<int, int> destination) {
-  priority_queue<node, vector<node>, compare> pq;
-  node current;
-  node next;
+    vector<vector<int>> costMap(width, vector<int>(height, INT_MAX));
 
-  int **costMap = allocateCostMap(width, height);
+    auto compare = [](const node& a, const node& b) { return a.f > b.f; };
+    priority_queue<node, vector<node>, decltype(compare)> pq(compare);
+    node current;
+    node next;
 
-  current.x = start.first;
-  current.y = start.second;
-  current.cost = 0;
-  current.f =
-      abs(current.x - destination.first) + abs(current.y - destination.second);
-  costMap[current.x][current.y] = current.f;
-  pq.push(current);
+    current.x = start.first;
+    current.y = start.second;
+    current.cost = 0;
+    current.f = abs(current.x - destination.first) +
+                abs(current.y - destination.second);
+    costMap[current.x][current.y] = current.f;
+    pq.push(current);
 
-  while (!pq.empty()) {
-    current = pq.top();
-    pq.pop();
-    // arrive at destination
-    if ((current.x == destination.first) && (current.y == destination.second)) {
-      deleteCostMap(costMap, width);
-      return current.cost;
+    vector<int> direction = {0, 1, 0, -1, 0};
+
+    while (!pq.empty()) {
+        current = pq.top();
+        pq.pop();
+        // arrive at destination
+        if ((current.x == destination.first) &&
+            (current.y == destination.second)) {
+            return current.cost;
+        }
+
+        for (int i = 0; i < 4; ++i) {
+            if (current.x + direction[i] < width &&
+                current.x + direction[i] >= 0 &&
+                current.y + direction[i + 1] >= 0 &&
+                current.y + direction[i + 1] < height &&
+                originalMap[(current.x + direction[i])]
+                           [current.y + direction[i + 1]] != '#') {
+                next.x = current.x + direction[i];
+                next.y = current.y + direction[i + 1];
+                next.cost = current.cost + 1;
+                next.f = next.cost + abs(next.x - destination.first) +
+                         abs(next.y - destination.second);
+                if (costMap[next.x][next.y] > next.f) {
+                    pq.push(next);
+                    costMap[next.x][next.y] = next.f;
+                }
+            }
+        }
     }
-    // try east
-    if ((current.x + 1 < width) &&
-        (originalMap[(current.x + 1)][current.y] != '#')) {
-      next.x = current.x + 1;
-      next.y = current.y;
-      next.cost = current.cost + 1;
-      next.f = next.cost + abs(next.x - destination.first) +
-               abs(next.y - destination.second);
-      if (costMap[next.x][next.y] > next.f) {
-        pq.push(next);
-        costMap[next.x][next.y] = next.f;
-      }
-    }
-    // try west
-    if ((current.x - 1 >= 0) &&
-        (originalMap[(current.x - 1)][current.y] != '#')) {
-      next.x = current.x - 1;
-      next.y = current.y;
-      next.cost = current.cost + 1;
-      next.f = next.cost + abs(next.x - destination.first) +
-               abs(next.y - destination.second);
-      if (costMap[next.x][next.y] > next.f) {
-        pq.push(next);
-        costMap[next.x][next.y] = next.f;
-      }
-    }
-    // try south
-    if ((current.y - 1 >= 0) &&
-        (originalMap[(current.x)][current.y - 1] != '#')) {
-      next.x = current.x;
-      next.y = current.y - 1;
-      next.cost = current.cost + 1;
-      next.f = next.cost + abs(next.x - destination.first) +
-               abs(next.y - destination.second);
-      if (costMap[next.x][next.y] > next.f) {
-        pq.push(next);
-        costMap[next.x][next.y] = next.f;
-      }
-    }
-    // try north
-    if ((current.y + 1 < height) &&
-        (originalMap[(current.x)][current.y + 1] != '#')) {
-      next.x = current.x;
-      next.y = current.y + 1;
-      next.cost = current.cost + 1;
-      next.f = next.cost + abs(next.x - destination.first) +
-               abs(next.y - destination.second);
-      if (costMap[next.x][next.y] > next.f) {
-        pq.push(next);
-        costMap[next.x][next.y] = next.f;
-      }
-    }
-  }
-  deleteCostMap(costMap, width);
-  return -1;
+
+    return -1;
 }
