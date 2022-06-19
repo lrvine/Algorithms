@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-c -g -O3 -Wall
-SOURCE=main.cc dijkstra.cc
+CFLAGS=-c -g -Wall -std=c++20 -Ofast
+SOURCE=dijkstra.cc main.cc
 LDFLAGS=
 OBJECTS= $(SOURCE:.cc=.o)
 

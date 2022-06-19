@@ -9,4 +9,5 @@ Basic algorithm implementation in C++
 * 05/12/2018 add Prim's algorithm
 * 06/05/2022 update mergeSort with recursive approach and refactor it.
 * 06/05/2022 refactor quicksort.
-* 06/19/2022 refactor Astar
+* 06/19/2022 refactor Astar.
+* 06/19/2022 refactor Dijkstra.
